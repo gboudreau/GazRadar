@@ -100,6 +100,7 @@ class StationCard extends HTMLElement {
 
     const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}`;
     const wazeUrl = `https://waze.com/ul?ll=${s.lat},${s.lng}&navigate=yes`;
+    const reportUrl = this._buildReportUrl(s);
 
     const expandedHTML = this._expanded ? `
       <div class="card-expanded">
@@ -111,9 +112,44 @@ class StationCard extends HTMLElement {
           <a href="${mapsUrl}" target="_blank" rel="noopener" class="map-btn gmaps">🗺 Google Maps</a>
           <a href="${wazeUrl}" target="_blank" rel="noopener" class="map-btn waze">🚗 Waze</a>
         </div>
+        <a href="${reportUrl}" class="report-btn">⚠️ Signaler une inexactitude de prix</a>
       </div>` : '';
 
     this.innerHTML = `<div class="station-card ${s.isBestDeal ? 'station-card--best' : ''}">${collapsedHTML}${expandedHTML}</div>`;
+  }
+
+  _buildReportUrl(s) {
+    const fmt = t => s.prices[t] != null ? s.prices[t].toFixed(1) + '¢' : 'N/D';
+    const subject = `Régie Essence Québec - Signaler un problème - Inexactitude de prix`;
+    const body = [
+      `SIGNALEMENT - Inexactitude de prix`,
+      ``,
+      `STATION`,
+      `-------------`,
+      `Bannière: ${s.brand}`,
+      `Nom: ${s.name}`,
+      `Adresse: ${s.address}`,
+      ``,
+      `PRIX ACTUELLEMENT AFFICHÉS`,
+      `-------------`,
+      `Régulier: ${fmt('Régulier')}`,
+      `Super: ${fmt('Super')}`,
+      `Diesel: ${fmt('Diesel')}`,
+      ``,
+      `LOCALISATION`,
+      `-------------`,
+      `Latitude: ${s.lat}`,
+      `Longitude: ${s.lng}`,
+      ``,
+      `COMMENTAIRES`,
+      `-------------`,
+      `(Indiquez les prix corrects ici)`,
+      ``,
+      `----------------------------------------`,
+      `Date du signalement: ${new Date().toLocaleString('fr-CA')}`,
+      `Signalement généré depuis GazRadar @ https://essence.patati.ca`,
+    ].join('\n');
+    return `mailto:req_enquete@regie-energie.qc.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 
   _esc(str) {

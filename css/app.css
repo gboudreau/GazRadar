@@ -550,6 +550,17 @@ station-list { display: block; }
 .map-btn.gmaps { background: #E8F0FE; color: #1A73E8; text-decoration: none; border: 1.5px solid #1A73E8; }
 .map-btn.waze  { background: #FFF3E0; color: #F4811F; text-decoration: none; border: 1.5px solid #F4811F; }
 
+.report-btn {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font);
+  color: var(--text-secondary);
+  padding: 8px 0 0;
+}
+
 /* Filter sheet */
 filter-sheet { display: block; }
 
