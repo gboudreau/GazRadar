@@ -688,7 +688,7 @@ filter-sheet { display: block; }
   appearance: none;
   height: 4px;
   border-radius: var(--radius-pill);
-  background: #E5E5EA;
+  background: #EBF4FF;
   outline: none;
   cursor: pointer;
 }
@@ -698,8 +698,8 @@ filter-sheet { display: block; }
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: white;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  background: var(--accent);
+  box-shadow: 0 2px 8px rgba(0,122,255,0.35);
   cursor: pointer;
 }
 
@@ -707,8 +707,8 @@ filter-sheet { display: block; }
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: white;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  background: var(--accent);
+  box-shadow: 0 2px 8px rgba(0,122,255,0.35);
   cursor: pointer;
   border: none;
 }
