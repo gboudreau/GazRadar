@@ -51,8 +51,9 @@ class StationCard extends HTMLElement {
       .filter(t => s.prices[t] != null)
       .map(t => {
         const isBest = s.isBestDeal && s.prices[t] === s.effectivePrice;
-        const delta = s.prices[t] - (minPriceByType[t] ?? s.prices[t]);
-        const deltaStr = delta > 0.05 ? `+${delta.toFixed(1)}¢` : null;
+        const minPrice = minPriceByType[t] ?? s.prices[t];
+        const deltaPct = Math.round((s.prices[t] - minPrice) / minPrice * 100);
+        const deltaStr = deltaPct > 0 ? `+${deltaPct}%` : null;
         return `
           <div class="price-chip ${isBest ? 'best' : ''}">
             <span class="price-chip-label">${t}</span>
