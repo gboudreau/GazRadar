@@ -119,7 +119,15 @@ class FilterSheet extends HTMLElement {
   _renderGasTypes() {
     const row = this.querySelector('#gas-type-row');
     if (!row) return;
-    const types = store.get('availableGasTypes');
+    const GAS_TYPE_ORDER = ['Régulier', 'Super', 'Diesel'];
+    const types = [...store.get('availableGasTypes')].sort((a, b) => {
+      const ia = GAS_TYPE_ORDER.indexOf(a);
+      const ib = GAS_TYPE_ORDER.indexOf(b);
+      if (ia === -1 && ib === -1) return a.localeCompare(b, 'fr');
+      if (ia === -1) return 1;
+      if (ib === -1) return -1;
+      return ia - ib;
+    });
     const selected = store.get('prefs').selectedGasTypes;
     row.innerHTML = types.map(type => {
       const isSelected = selected.includes(type);
