@@ -33,7 +33,10 @@ class FilterSheet extends HTMLElement {
         <div class="sheet-handle"></div>
 
         <div class="sheet-section">
-          <div class="sheet-section-title">Marques</div>
+          <div class="sheet-section-header">
+            <div class="sheet-section-title">Marques</div>
+            <button class="sheet-clear-btn" id="brand-clear" hidden>Effacer</button>
+          </div>
           <div class="brand-grid" id="brand-grid"></div>
         </div>
 
@@ -84,6 +87,13 @@ class FilterSheet extends HTMLElement {
       return 0;
     });
     const selected = store.get('prefs').selectedBrands;
+
+    const clearBtn = this.querySelector('#brand-clear');
+    if (clearBtn) {
+      clearBtn.hidden = selected.length === 0;
+      clearBtn.onclick = () => this._savePrefs({ selectedBrands: [] });
+    }
+
     grid.innerHTML = brands.map(brand => {
       const style = getBrandStyle(brand);
       const isSelected = selected.includes(brand);
