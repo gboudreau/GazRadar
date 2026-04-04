@@ -80,15 +80,31 @@ async function loadAndSetStations(force = false) {
   }
 }
 
+let _locationRefreshInterval = null;
+
 async function initLocation() {
   store.set('locationStatus', 'pending');
   try {
     const loc = await getLocation();
     store.set('userLocation', loc);
     store.set('locationStatus', 'granted');
+    startLocationRefresh();
   } catch {
     store.set('locationStatus', 'denied');
   }
+}
+
+function startLocationRefresh() {
+  if (_locationRefreshInterval) return; // already running
+  _locationRefreshInterval = setInterval(async () => {
+    if (store.get('locationStatus') !== 'granted') return;
+    try {
+      const loc = await getLocation();
+      store.set('userLocation', loc);
+    } catch {
+      // silently keep the last known location
+    }
+  }, 60_000);
 }
 
 (async () => {
