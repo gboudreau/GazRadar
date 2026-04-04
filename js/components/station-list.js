@@ -133,8 +133,8 @@ class StationList extends HTMLElement {
       <div class="summary-card">
         <div class="summary-stats">
           <div class="summary-stat">
-            <span class="summary-stat-val">${fmt(min)}</span>
-            <span class="summary-stat-label">Min</span>
+            <span class="summary-stat-val summary-stat--min">${fmt(min)}</span>
+            <span class="summary-stat-label summary-stat--min">🔥 Min</span>
           </div>
           <div class="summary-stat-divider"></div>
           <div class="summary-stat">
@@ -144,9 +144,9 @@ class StationList extends HTMLElement {
           </div>
           <div class="summary-stat-divider"></div>
           <div class="summary-stat">
-            <span class="summary-stat-val">${fmt(max)}</span>
+            <span class="summary-stat-val summary-stat--max">${fmt(max)}</span>
             ${maxDelta > 0 ? `<span class="summary-stat-delta">+${maxDelta}%</span>` : ''}
-            <span class="summary-stat-label">Max</span>
+            <span class="summary-stat-label summary-stat--max">Max</span>
           </div>
         </div>
         <div class="summary-count">${count} station${count > 1 ? 's' : ''}</div>
