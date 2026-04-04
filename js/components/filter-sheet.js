@@ -33,16 +33,18 @@ class FilterSheet extends HTMLElement {
         <div class="sheet-handle"></div>
 
         <div class="sheet-section">
-          <div class="sheet-section-header">
-            <div class="sheet-section-title">Marques</div>
-            <button class="sheet-clear-btn" id="brand-clear" hidden>Effacer</button>
-          </div>
-          <div class="brand-grid" id="brand-grid"></div>
+          <div class="sheet-section-title">Type de carburant</div>
+          <div class="gas-type-row" id="gas-type-row"></div>
         </div>
 
         <div class="sheet-section">
-          <div class="sheet-section-title">Type de carburant</div>
-          <div class="gas-type-row" id="gas-type-row"></div>
+          <div class="sheet-section-title">Trier par</div>
+          <div class="segmented-control">
+            <button class="seg-option ${prefs.sortBy === 'price' ? 'active' : ''}"
+              data-sort="price">💰 Prix</button>
+            <button class="seg-option ${prefs.sortBy === 'distance' ? 'active' : ''}"
+              data-sort="distance">📍 Distance</button>
+          </div>
         </div>
 
         <div class="sheet-section">
@@ -55,13 +57,11 @@ class FilterSheet extends HTMLElement {
         </div>
 
         <div class="sheet-section">
-          <div class="sheet-section-title">Trier par</div>
-          <div class="segmented-control">
-            <button class="seg-option ${prefs.sortBy === 'price' ? 'active' : ''}"
-              data-sort="price">💰 Prix</button>
-            <button class="seg-option ${prefs.sortBy === 'distance' ? 'active' : ''}"
-              data-sort="distance">📍 Distance</button>
+          <div class="sheet-section-header">
+            <div class="sheet-section-title">Marques</div>
+            <button class="sheet-clear-btn" id="brand-clear" hidden>Effacer</button>
           </div>
+          <div class="brand-grid" id="brand-grid"></div>
         </div>
       </div>
     `;
