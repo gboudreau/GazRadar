@@ -6,18 +6,22 @@ const CACHE_TTL_MS = 2 * 60 * 60 * 1000;
 export function normalizeStation(feature) {
   const p = feature.properties ?? {};
   const [lng, lat] = feature.geometry.coordinates;
-  const rawPrices = p.prices ?? {};
+
+  // API returns Prices as an array: [{GasType, Price, IsAvailable}, ...]
   const prices = {};
-  for (const [type, val] of Object.entries(rawPrices)) {
-    prices[type] = val != null ? parseFloat(String(val).replace('¢', '')) : null;
+  for (const item of (p.Prices ?? [])) {
+    prices[item.GasType] = (item.IsAvailable && item.Price)
+      ? parseFloat(String(item.Price).replace('¢', ''))
+      : null;
   }
+
   return {
     id: String(feature.id ?? p.id ?? crypto.randomUUID()),
-    name: p.name ?? 'Inconnu',
+    name: p.Name ?? 'Inconnu',
     brand: p.brand ?? 'Inconnu',
     lat,
     lng,
-    address: p.address ?? '',
+    address: p.Address ?? '',
     prices,
   };
 }

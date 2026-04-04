@@ -2,15 +2,20 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { normalizeStation } from '../js/data.js';
 
+// Matches the actual API shape: properties.Prices is an array of {GasType, Price, IsAvailable}
 const makeFeature = (overrides = {}) => ({
   id: 'test-1',
   type: 'Feature',
-  geometry: { type: 'Point', coordinates: [-73.5673, 45.5017] },
+  geometry: { type: 'Point', coordinates: [-73.5673, 45.5017] }, // [lng, lat]
   properties: {
-    name: 'Station Test',
+    Name: 'Station Test',
     brand: 'Shell',
-    address: '123 rue Test',
-    prices: { 'Régulier': '167.9¢', 'Super': '177.4¢', 'Diesel': null },
+    Address: '123 rue Test',
+    Prices: [
+      { GasType: 'Régulier', Price: '167.9¢', IsAvailable: true },
+      { GasType: 'Super',    Price: '177.4¢', IsAvailable: true },
+      { GasType: 'Diesel',   Price: null,     IsAvailable: false },
+    ],
     ...overrides,
   },
 });
@@ -27,21 +32,20 @@ test('strips ¢ and parses prices as floats', () => {
   assert.equal(s.prices['Super'], 177.4);
 });
 
-test('null price stays null', () => {
+test('unavailable price is stored as null', () => {
   const s = normalizeStation(makeFeature());
   assert.equal(s.prices['Diesel'], null);
 });
 
-test('maps name, brand, address', () => {
+test('maps Name → name, brand, Address → address', () => {
   const s = normalizeStation(makeFeature());
   assert.equal(s.name, 'Station Test');
   assert.equal(s.brand, 'Shell');
   assert.equal(s.address, '123 rue Test');
 });
 
-test('missing prices object produces empty prices', () => {
-  const f = makeFeature({ prices: undefined });
-  const s = normalizeStation(f);
+test('missing Prices array produces empty prices', () => {
+  const s = normalizeStation(makeFeature({ Prices: undefined }));
   assert.deepEqual(s.prices, {});
 });
 
