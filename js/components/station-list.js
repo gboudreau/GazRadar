@@ -71,11 +71,12 @@ class StationList extends HTMLElement {
       return;
     }
 
-    const existing = [...this.querySelectorAll('station-card')];
-    const listEl = this.querySelector('.station-list') ?? (() => {
+    const existingList = this.querySelector('.station-list');
+    if (!existingList || existingList.querySelector('.skeleton')) {
       this.innerHTML = '<div class="station-list"></div>';
-      return this.querySelector('.station-list');
-    })();
+    }
+    const listEl = this.querySelector('.station-list');
+    const existing = [...listEl.querySelectorAll('station-card')];
 
     stations.forEach((s, i) => {
       let card = existing[i];
