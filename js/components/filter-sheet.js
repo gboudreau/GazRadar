@@ -46,13 +46,12 @@ class FilterSheet extends HTMLElement {
         </div>
 
         <div class="sheet-section">
-          <div class="sheet-section-title">Distance maximale</div>
+          <div class="sheet-section-title">Distance Maximale</div>
           <div class="distance-row">
-            <span>Distance</span>
+            <input type="range" class="distance-slider" id="distance-slider"
+              min="1" max="50" step="1" value="${prefs.maxDistanceKm}" />
             <span class="distance-val" id="distance-val">${prefs.maxDistanceKm} km</span>
           </div>
-          <input type="range" class="distance-slider" id="distance-slider"
-            min="1" max="50" step="1" value="${prefs.maxDistanceKm}" />
         </div>
 
         <div class="sheet-section">

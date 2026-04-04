@@ -666,17 +666,20 @@ filter-sheet { display: block; }
 
 .distance-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
-  font-size: 13px;
-  font-weight: 600;
+  gap: 12px;
 }
 
-.distance-val { color: var(--accent); font-size: 15px; font-weight: 700; }
+.distance-val {
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 
 .distance-slider {
-  width: 100%;
+  flex: 1;
   -webkit-appearance: none;
   appearance: none;
   height: 4px;
