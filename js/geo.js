@@ -11,6 +11,34 @@ export function haversine(a, b) {
   return EARTH_RADIUS_KM * 2 * Math.asin(Math.sqrt(x));
 }
 
+export async function geocode(query) {
+  const url = new URL('https://nominatim.openstreetmap.org/search');
+  url.searchParams.set('q', query);
+  url.searchParams.set('format', 'json');
+  url.searchParams.set('limit', '6');
+  url.searchParams.set('countrycodes', 'ca');
+  url.searchParams.set('addressdetails', '1');
+  const res = await fetch(url, {
+    headers: { 'Accept-Language': 'fr', 'User-Agent': 'GazRadar/1.0' },
+  });
+  if (!res.ok) throw new Error('Geocoding failed');
+  const data = await res.json();
+  return data.map(item => ({
+    lat: parseFloat(item.lat),
+    lng: parseFloat(item.lon),
+    label: _shortLabel(item),
+  }));
+}
+
+function _shortLabel(item) {
+  const a = item.address ?? {};
+  const place = a.city || a.town || a.village || a.municipality || a.hamlet || '';
+  const region = a.state || a.province || '';
+  const road = a.road ? `${a.house_number ? a.house_number + ' ' : ''}${a.road}` : '';
+  const parts = [road, place, region].filter(Boolean);
+  return parts.length ? parts.join(', ') : item.display_name;
+}
+
 export function getLocation() {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {

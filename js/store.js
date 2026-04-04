@@ -16,6 +16,8 @@ const _state = {
   generatedAt: null,
   lastFetchedAt: null,
   filterSheetOpen: false,
+  locationPickerOpen: false,
+  customLocation: null,
   isFirstLaunch: true,
 };
 

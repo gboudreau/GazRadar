@@ -9,11 +9,15 @@
   <link rel="stylesheet" href="css/app.css" />
 </head>
 <body>
-  <app-header></app-header>
+  <div id="top-bar">
+    <app-header></app-header>
+    <location-bar></location-bar>
+  </div>
   <main>
     <station-list></station-list>
   </main>
   <filter-sheet></filter-sheet>
+  <location-picker></location-picker>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>

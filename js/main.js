@@ -3,6 +3,8 @@ import { getLocation } from './geo.js';
 import { loadStations } from './data.js';
 import { filterAndSort } from './filter.js';
 import './components/app-header.js';
+import './components/location-bar.js';
+import './components/location-picker.js';
 import './components/filter-sheet.js';
 import './components/station-list.js';
 import './components/station-card.js';
@@ -27,15 +29,25 @@ if (savedMeta) {
   store.set('lastFetchedAt', savedMeta.lastFetchedAt);
 }
 
+const savedCustomLocation = JSON.parse(localStorage.getItem('gazradar_custom_location') ?? 'null');
+if (savedCustomLocation) store.set('customLocation', savedCustomLocation);
+
+store.subscribe('customLocation', loc => {
+  if (loc) localStorage.setItem('gazradar_custom_location', JSON.stringify(loc));
+  else localStorage.removeItem('gazradar_custom_location');
+});
+
 const firstLaunchDone = localStorage.getItem('gazradar_first_launch_done');
 if (firstLaunchDone) store.set('isFirstLaunch', false);
 
 function runFilter() {
-  const stations     = store.get('stations');
-  const prefs        = store.get('prefs');
-  const userLocation = store.get('userLocation');
+  const stations        = store.get('stations');
+  const prefs           = store.get('prefs');
+  const customLocation  = store.get('customLocation');
+  const userLocation    = store.get('userLocation');
+  const effectiveLoc    = customLocation ?? userLocation;
   if (!stations.length) return;
-  const { results, brandExcludedCount } = filterAndSort(stations, prefs, userLocation);
+  const { results, brandExcludedCount } = filterAndSort(stations, prefs, effectiveLoc);
   store.set('filteredStations', results);
   store.set('brandExcludedCount', brandExcludedCount);
 }
@@ -43,6 +55,7 @@ function runFilter() {
 store.subscribe('stations', runFilter);
 store.subscribe('prefs', runFilter);
 store.subscribe('userLocation', runFilter);
+store.subscribe('customLocation', runFilter);
 
 document.addEventListener('gazradar:refresh', () => loadAndSetStations(true));
 document.addEventListener('gazradar:retry-location', initLocation);
