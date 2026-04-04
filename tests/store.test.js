@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { store } from '../js/store.js';
 
 test('get returns initial value', () => {
+  store.set('locationStatus', 'pending'); // reset to known state — other tests mutate this key
   assert.equal(store.get('locationStatus'), 'pending');
 });
 

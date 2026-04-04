@@ -63,9 +63,24 @@ test('tags isBestDeal on station with cheapest price', () => {
   assert.equal(best?.id, 'b');
 });
 
-test('only one station tagged isBestDeal', () => {
+test('only the cheapest station is tagged isBestDeal (no tie)', () => {
   const { results } = filterAndSort([stA, stB], basePrefs, loc);
   assert.equal(results.filter(s => s.isBestDeal).length, 1);
+  assert.equal(results.find(s => s.isBestDeal)?.id, 'b');
+});
+
+test('all stations with tied cheapest price are tagged isBestDeal', () => {
+  const stTie1 = makeStation('t1', 'Shell', 45.503, -73.600, { 'Régulier': 167.9 });
+  const stTie2 = makeStation('t2', 'Esso',  45.505, -73.605, { 'Régulier': 167.9 });
+  const { results } = filterAndSort([stTie1, stTie2], basePrefs, loc);
+  assert.equal(results.filter(s => s.isBestDeal).length, 2);
+});
+
+test('returns empty results when userLocation is null', () => {
+  // Before geolocation resolves, distanceKm = Infinity — all stations filtered out
+  const { results, brandExcludedCount } = filterAndSort([stA, stB], basePrefs, null);
+  assert.equal(results.length, 0);
+  assert.equal(brandExcludedCount, 0);
 });
 
 test('effectivePrice uses cheapest among selected gas types', () => {

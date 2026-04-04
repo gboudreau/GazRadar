@@ -37,7 +37,9 @@ export async function loadStations({ force = false } = {}) {
   if (!response.ok) throw new Error(`Fetch failed: ${response.status}`);
   const geojson = await response.json();
 
-  const stations = geojson.features.map(normalizeStation);
+  const stations = geojson.features
+    .filter(f => f.geometry?.coordinates)
+    .map(normalizeStation);
   const generatedAt = geojson.metadata?.generated_at ?? null;
   const lastFetchedAt = Date.now();
 
