@@ -411,6 +411,10 @@ station-list { display: block; }
   font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .station-distance {
@@ -446,7 +450,6 @@ station-list { display: block; }
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex: 1;
 }
 
 .card-row-3 {

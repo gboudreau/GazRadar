@@ -70,11 +70,11 @@ class StationCard extends HTMLElement {
             style="background:${brandStyle.bg};color:${brandStyle.text}">
             ${this._esc(s.brand)}
           </span>
-          <span class="station-address">${this._esc(s.address)}</span>
+          <span class="station-name">${this._esc(s.name)}</span>
           <span class="station-distance">${distText}</span>
         </div>
         <div class="card-row-2">
-          <span class="station-name">${this._esc(s.name)}</span>
+          <span class="station-address">${this._esc(s.address)}</span>
         </div>
         <div class="card-row-3">${selectedChips}</div>
       </div>`;
