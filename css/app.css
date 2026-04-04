@@ -394,6 +394,11 @@ station-list { display: block; }
 
 .station-card:active { transform: scale(0.97); }
 
+.station-card--best {
+  border: 1.5px solid var(--success);
+  background: #F0FBF4;
+}
+
 .card-collapsed { padding: 14px 16px; }
 
 .card-row-1 {

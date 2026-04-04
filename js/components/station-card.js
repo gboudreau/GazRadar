@@ -113,7 +113,7 @@ class StationCard extends HTMLElement {
         </div>
       </div>` : '';
 
-    this.innerHTML = `<div class="station-card">${collapsedHTML}${expandedHTML}</div>`;
+    this.innerHTML = `<div class="station-card ${s.isBestDeal ? 'station-card--best' : ''}">${collapsedHTML}${expandedHTML}</div>`;
   }
 
   _esc(str) {
