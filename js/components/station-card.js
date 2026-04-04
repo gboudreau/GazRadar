@@ -79,7 +79,17 @@ class StationCard extends HTMLElement {
         <div class="card-row-3">${selectedChips}</div>
       </div>`;
 
-    const allChips = allGasTypes.map(t => {
+    const GAS_TYPE_ORDER = ['Régulier', 'Super', 'Diesel'];
+    const sortedGasTypes = [...allGasTypes].sort((a, b) => {
+      const ia = GAS_TYPE_ORDER.indexOf(a);
+      const ib = GAS_TYPE_ORDER.indexOf(b);
+      if (ia === -1 && ib === -1) return a.localeCompare(b, 'fr');
+      if (ia === -1) return 1;
+      if (ib === -1) return -1;
+      return ia - ib;
+    });
+
+    const allChips = sortedGasTypes.map(t => {
       const price = s.prices[t];
       return `
         <div class="price-chip">
