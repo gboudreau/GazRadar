@@ -134,18 +134,19 @@ class StationList extends HTMLElement {
         <div class="summary-stats">
           <div class="summary-stat">
             <span class="summary-stat-val summary-stat--min">${fmt(min)}</span>
+            <span class="summary-stat-delta" style="visibility:hidden">0%</span>
             <span class="summary-stat-label summary-stat--min">🔥 Min</span>
           </div>
           <div class="summary-stat-divider"></div>
           <div class="summary-stat">
             <span class="summary-stat-val">${fmt(median)}</span>
-            ${medDelta > 0 ? `<span class="summary-stat-delta">+${medDelta}%</span>` : ''}
+            <span class="summary-stat-delta" style="${medDelta > 0 ? '' : 'visibility:hidden'}">${medDelta > 0 ? `+${medDelta}%` : '0%'}</span>
             <span class="summary-stat-label">Médiane</span>
           </div>
           <div class="summary-stat-divider"></div>
           <div class="summary-stat">
             <span class="summary-stat-val summary-stat--max">${fmt(max)}</span>
-            ${maxDelta > 0 ? `<span class="summary-stat-delta">+${maxDelta}%</span>` : ''}
+            <span class="summary-stat-delta" style="${maxDelta > 0 ? '' : 'visibility:hidden'}">${maxDelta > 0 ? `+${maxDelta}%` : '0%'}</span>
             <span class="summary-stat-label summary-stat--max">Max</span>
           </div>
         </div>
