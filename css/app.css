@@ -399,11 +399,12 @@ station-list { display: block; }
   background: #F0FBF4;
 }
 
-.card-collapsed { padding: 14px 16px; }
+.card-collapsed { padding: 14px 16px; text-align: center; }
 
 .card-row-1 {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
 }
 
@@ -411,7 +412,6 @@ station-list { display: block; }
   font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
-  flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -422,7 +422,6 @@ station-list { display: block; }
   font-weight: 500;
   color: var(--text-secondary);
   white-space: nowrap;
-  margin-left: auto;
   flex-shrink: 0;
 }
 
@@ -457,6 +456,7 @@ station-list { display: block; }
   gap: 8px;
   margin-top: 10px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .price-chip {
@@ -513,6 +513,8 @@ station-list { display: block; }
   gap: 12px;
 }
 
+.card-expanded { text-align: center; }
+
 .expanded-label {
   font-size: 11px;
   font-weight: 700;
@@ -522,7 +524,7 @@ station-list { display: block; }
   margin-bottom: 8px;
 }
 
-.all-prices { display: flex; gap: 8px; flex-wrap: wrap; }
+.all-prices { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
 
 .map-buttons { display: flex; gap: 8px; }
 
