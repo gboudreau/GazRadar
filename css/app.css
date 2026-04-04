@@ -433,8 +433,8 @@ station-list { display: block; }
   display: inline-flex;
   align-items: center;
   border-radius: var(--radius-pill);
-  padding: 5px 12px;
-  font-size: 13px;
+  padding: 3px 9px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -482,7 +482,7 @@ station-list { display: block; }
 }
 
 .price-chip-value {
-  font-size: 15px;
+  font-size: 19px;
   font-weight: 700;
   color: var(--text-primary);
   margin-top: 2px;
