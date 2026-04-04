@@ -37,15 +37,28 @@ class StationCard extends HTMLElement {
       ? `${s.distanceKm.toFixed(1)} km`
       : '— km';
 
+    // Compute per-type minimum price across all visible results
+    const minPriceByType = {};
+    for (const st of store.get('filteredStations')) {
+      for (const [type, price] of Object.entries(st.prices)) {
+        if (price != null && (minPriceByType[type] == null || price < minPriceByType[type])) {
+          minPriceByType[type] = price;
+        }
+      }
+    }
+
     const selectedChips = prefs.selectedGasTypes
       .filter(t => s.prices[t] != null)
       .map(t => {
         const isBest = s.isBestDeal && s.prices[t] === s.effectivePrice;
+        const delta = s.prices[t] - (minPriceByType[t] ?? s.prices[t]);
+        const deltaStr = delta > 0.05 ? `+${delta.toFixed(1)}¢` : null;
         return `
           <div class="price-chip ${isBest ? 'best' : ''}">
             <span class="price-chip-label">${t}</span>
             <span class="price-chip-value">${s.prices[t].toFixed(1)}¢</span>
             ${isBest ? '<span class="best-badge">🔥 MEILLEUR PRIX</span>' : ''}
+            ${deltaStr ? `<span class="price-delta">${deltaStr}</span>` : ''}
           </div>`;
       }).join('');
 

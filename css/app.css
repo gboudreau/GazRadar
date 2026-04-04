@@ -248,6 +248,13 @@ station-list { display: block; }
   margin-top: 2px;
 }
 
+.price-delta {
+  font-size: 10px;
+  font-weight: 600;
+  color: #FF3B30;
+  margin-top: 2px;
+}
+
 /* Expanded card */
 .card-expanded {
   border-top: 1px solid var(--border);
