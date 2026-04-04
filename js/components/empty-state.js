@@ -23,7 +23,7 @@ class EmptyState extends HTMLElement {
       ? `<div class="empty-hint">${count} station${count > 1 ? 's' : ''} à proximité cachée${count > 1 ? 's' : ''} par les filtres de marque.</div>`
       : `<div class="empty-hint">Essayez d'augmenter la distance (actuellement ${dist} km).</div>`;
 
-    const clearBtn = hasBrandFilter
+    const clearBtn = hasBrandFilter && count > 0
       ? `<button class="clear-btn" id="clear-brands">Effacer les filtres de marque</button>`
       : '';
 
