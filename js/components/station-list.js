@@ -21,7 +21,7 @@ class StationList extends HTMLElement {
     const locationStatus = store.get('locationStatus');
     const stations       = store.get('filteredStations');
 
-    if (locationStatus === 'denied') {
+    if (locationStatus === 'denied' && !store.get('customLocation')) {
       this.innerHTML = `
         <div class="location-denied">
           <div style="font-size:48px">📍</div>
