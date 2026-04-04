@@ -66,6 +66,18 @@ class StationList extends HTMLElement {
       return;
     }
 
+    if (locationStatus === 'pending') {
+      this.innerHTML = `
+        <div class="location-pending">
+          <div class="location-pending-spinner"></div>
+          <div style="font-size:17px;font-weight:700">Localisation en cours…</div>
+          <div style="font-size:14px;color:var(--text-secondary)">
+            Les stations s'afficheront dès que votre position sera connue.
+          </div>
+        </div>`;
+      return;
+    }
+
     if (!stations.length) {
       this.innerHTML = '<empty-state></empty-state>';
       return;
