@@ -585,7 +585,7 @@ filter-sheet { display: block; }
   margin: 0 auto 16px;
 }
 
-.sheet-section { margin-bottom: 20px; }
+.sheet-section { margin-bottom: 28px; }
 
 .sheet-section-header {
   display: flex;
@@ -600,7 +600,11 @@ filter-sheet { display: block; }
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--text-secondary);
+  margin-bottom: 12px;
 }
+
+/* Marques: spacing is handled by .sheet-section-header's margin-bottom */
+.sheet-section-header .sheet-section-title { margin-bottom: 0; }
 
 .sheet-clear-btn {
   font-size: 13px;
