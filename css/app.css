@@ -403,16 +403,14 @@ station-list { display: block; }
 
 .card-row-1 {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  gap: 8px;
 }
 
 .station-name {
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -0.41px;
-  color: var(--text-primary);
-  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 
 .station-distance {
@@ -420,23 +418,20 @@ station-list { display: block; }
   font-weight: 500;
   color: var(--text-secondary);
   white-space: nowrap;
-  margin-left: 8px;
-  padding-top: 2px;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .card-row-2 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .brand-pill {
   display: inline-flex;
   align-items: center;
   border-radius: var(--radius-pill);
-  padding: 3px 10px;
-  font-size: 11px;
+  padding: 5px 12px;
+  font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -445,9 +440,9 @@ station-list { display: block; }
 }
 
 .station-address {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
