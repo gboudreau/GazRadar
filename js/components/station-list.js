@@ -71,11 +71,17 @@ class StationList extends HTMLElement {
       return;
     }
 
+    // Reset if coming from skeleton/error/empty state
     const existingList = this.querySelector('.station-list');
     if (!existingList || existingList.querySelector('.skeleton')) {
-      this.innerHTML = '<div class="station-list"></div>';
+      this.innerHTML = '<div class="results-summary"></div><div class="station-list"></div>';
     }
-    const listEl = this.querySelector('.station-list');
+
+    // Update summary bar
+    this._renderSummary(this.querySelector('.results-summary'), stations);
+
+    // Reuse / create station cards
+    const listEl  = this.querySelector('.station-list');
     const existing = [...listEl.querySelectorAll('station-card')];
 
     stations.forEach((s, i) => {
@@ -90,6 +96,49 @@ class StationList extends HTMLElement {
     while (listEl.children.length > stations.length) {
       listEl.removeChild(listEl.lastChild);
     }
+  }
+
+  _renderSummary(el, stations) {
+    if (!el) return;
+
+    const prices = stations.map(s => s.effectivePrice).filter(p => p != null && p !== Infinity);
+    if (!prices.length) { el.innerHTML = ''; return; }
+
+    const sorted = [...prices].sort((a, b) => a - b);
+    const min    = sorted[0];
+    const max    = sorted[sorted.length - 1];
+    const mid    = Math.floor(sorted.length / 2);
+    const median = sorted.length % 2 === 0
+      ? (sorted[mid - 1] + sorted[mid]) / 2
+      : sorted[mid];
+
+    const medDelta = Math.round((median - min) / min * 100);
+    const maxDelta = Math.round((max - min) / min * 100);
+    const fmt      = p => p.toFixed(1) + '¢';
+    const count    = stations.length;
+
+    el.innerHTML = `
+      <div class="summary-card">
+        <div class="summary-stats">
+          <div class="summary-stat">
+            <span class="summary-stat-val">${fmt(min)}</span>
+            <span class="summary-stat-label">Min</span>
+          </div>
+          <div class="summary-stat-divider"></div>
+          <div class="summary-stat">
+            <span class="summary-stat-val">${fmt(median)}</span>
+            ${medDelta > 0 ? `<span class="summary-stat-delta">+${medDelta}%</span>` : ''}
+            <span class="summary-stat-label">Médiane</span>
+          </div>
+          <div class="summary-stat-divider"></div>
+          <div class="summary-stat">
+            <span class="summary-stat-val">${fmt(max)}</span>
+            ${maxDelta > 0 ? `<span class="summary-stat-delta">+${maxDelta}%</span>` : ''}
+            <span class="summary-stat-label">Max</span>
+          </div>
+        </div>
+        <div class="summary-count">${count} station${count > 1 ? 's' : ''}</div>
+      </div>`;
   }
 }
 
