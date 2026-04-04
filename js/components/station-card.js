@@ -15,6 +15,7 @@ class StationCard extends HTMLElement {
   }
 
   set station(s) {
+    if (this._station?.id !== s.id) this._expanded = false;
     this._station = s;
     this._render();
   }
