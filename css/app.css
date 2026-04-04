@@ -407,14 +407,15 @@ station-list { display: block; }
 .card-row-1 {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
 }
 
 .station-name {
+  flex: 1;
   font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
