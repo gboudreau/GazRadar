@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head><title>Generate Icons</title></head>
+<body>
+<script>
+function drawIcon(size) {
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+
+  ctx.fillStyle = '#F2F2F7';
+  ctx.fillRect(0, 0, size, size);
+
+  ctx.fillStyle = '#007AFF';
+  ctx.beginPath();
+  ctx.arc(size / 2, size / 2, size * 0.42, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.font = `${size * 0.5}px serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('⛽', size / 2, size / 2);
+
+  return canvas;
+}
+
+[192, 512].forEach(size => {
+  const canvas = drawIcon(size);
+  const a = document.createElement('a');
+  a.download = `icon-${size}.png`;
+  a.href = canvas.toDataURL('image/png');
+  a.textContent = `Download icon-${size}.png`;
+  a.style.display = 'block';
+  a.style.margin = '8px';
+  document.body.appendChild(a);
+  document.body.appendChild(canvas);
+});
+</script>
+</body>
+</html>

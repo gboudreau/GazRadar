@@ -1,0 +1,15 @@
+{
+  "name": "GazRadar",
+  "short_name": "GazRadar",
+  "description": "Trouvez les meilleures prix d'essence près de vous au Québec",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#F2F2F7",
+  "background_color": "#F2F2F7",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
