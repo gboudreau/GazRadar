@@ -647,13 +647,15 @@ filter-sheet { display: block; }
   opacity: 0.6;
 }
 
-.gas-type-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.gas-type-row { display: flex; gap: 8px; }
 
 .gas-pill {
+  flex: 1;
   border-radius: var(--radius-pill);
-  padding: 7px 14px;
-  font-size: 13px;
+  padding: 11px 8px;
+  font-size: 14px;
   font-weight: 600;
+  text-align: center;
   background: var(--bg);
   color: var(--text-primary);
   cursor: pointer;
