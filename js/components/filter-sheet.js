@@ -9,9 +9,13 @@ class FilterSheet extends HTMLElement {
       store.subscribe('filterSheetOpen', open => this._setOpen(open)),
       store.subscribe('availableBrands',  () => this._renderBrandGrid()),
       store.subscribe('availableGasTypes', () => this._renderGasTypes()),
-      // Re-sync pill selection state when prefs are changed externally
-      // (e.g. "Clear Brand Filters" from empty-state)
-      store.subscribe('prefs', () => { this._renderBrandGrid(); this._renderGasTypes(); }),
+      // Re-sync all controls when prefs are changed externally
+      // (e.g. localStorage hydration on boot, "Clear Brand Filters" from empty-state)
+      store.subscribe('prefs', () => {
+        this._renderBrandGrid();
+        this._renderGasTypes();
+        this._syncStaticControls();
+      }),
     ];
     this._buildShell();
     this._setOpen(store.get('filterSheetOpen'));
@@ -146,6 +150,17 @@ class FilterSheet extends HTMLElement {
 
     this.querySelector('#sheet-backdrop')?.addEventListener('click', () => {
       this._close();
+    });
+  }
+
+  _syncStaticControls() {
+    const prefs = store.get('prefs');
+    const slider = this.querySelector('#distance-slider');
+    const label  = this.querySelector('#distance-val');
+    if (slider) slider.value = prefs.maxDistanceKm;
+    if (label)  label.textContent = `${prefs.maxDistanceKm} km`;
+    this.querySelectorAll('.seg-option').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.sort === prefs.sortBy);
     });
   }
 
