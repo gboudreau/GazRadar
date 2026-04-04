@@ -543,8 +543,8 @@ station-list { display: block; }
   font-family: var(--font);
 }
 
-.map-btn.gmaps { background: #E8F0FE; color: #1A73E8; text-decoration: none; }
-.map-btn.waze  { background: #FFF3E0; color: #F4811F; text-decoration: none; }
+.map-btn.gmaps { background: #E8F0FE; color: #1A73E8; text-decoration: none; border: 1.5px solid #1A73E8; }
+.map-btn.waze  { background: #FFF3E0; color: #F4811F; text-decoration: none; border: 1.5px solid #F4811F; }
 
 /* Filter sheet */
 filter-sheet { display: block; }
