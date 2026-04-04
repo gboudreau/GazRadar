@@ -18,7 +18,7 @@ export function normalizeStation(feature) {
   return {
     id: String(feature.id ?? p.id ?? crypto.randomUUID()),
     name: p.Name ?? 'Inconnu',
-    brand: p.brand ?? 'Inconnu',
+    brand: (p.brand === 'Aucun' || !p.brand) ? 'Inconnu' : p.brand,
     lat,
     lng,
     address: p.Address ?? '',

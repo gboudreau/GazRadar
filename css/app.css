@@ -368,6 +368,11 @@ filter-sheet { display: block; }
 
 .brand-filter-pill.selected { outline-color: var(--accent); }
 
+.brand-filter-pill.brand-unknown {
+  font-style: italic;
+  opacity: 0.6;
+}
+
 .gas-type-row { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .gas-pill {

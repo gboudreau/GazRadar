@@ -1,22 +1,15 @@
 const BRAND_COLORS = {
-  'Shell':         { bg: '#FFD500', text: '#000000' },
-  'Esso':          { bg: '#ED1C24', text: '#FFFFFF' },
-  'Petro-Canada':  { bg: '#E31837', text: '#FFFFFF' },
-  'Costco':        { bg: '#005596', text: '#FFFFFF' },
-  'Ultramar':      { bg: '#005DAA', text: '#FFFFFF' },
-  'Irving':        { bg: '#003DA5', text: '#FFFFFF' },
-  'Canadian Tire': { bg: '#D62B2B', text: '#FFFFFF' },
-  'Pioneer':       { bg: '#F7941D', text: '#000000' },
+  'Shell':        { bg: '#FFD500', text: '#000000' },
+  'Esso':         { bg: '#0033A0', text: '#FFFFFF' },
+  'Petro-Canada': { bg: '#E1251B', text: '#FFFFFF' },
+  'Ultramar':     { bg: '#005DAA', text: '#FFFFFF' },
+  'Harnois':      { bg: '#E30613', text: '#FFFFFF' },
+  'Irving':       { bg: '#006341', text: '#FFFFFF' },
+  'Sonic':        { bg: '#F58220', text: '#FFFFFF' },
 };
 
-function hashBrand(str) {
-  let hash = 0;
-  for (const ch of str) hash = (hash * 31 + ch.charCodeAt(0)) & 0xffffffff;
-  const hue = Math.abs(hash) % 360;
-  const text = (hue < 60 || hue > 200) ? '#000000' : '#FFFFFF';
-  return { bg: `hsl(${hue}, 55%, 45%)`, text };
-}
+const DEFAULT_STYLE = { bg: '#E5E5EA', text: '#1C1C1E' };
 
 export function getBrandStyle(brand) {
-  return BRAND_COLORS[brand] ?? hashBrand(brand);
+  return BRAND_COLORS[brand] ?? DEFAULT_STYLE;
 }

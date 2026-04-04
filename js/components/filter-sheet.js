@@ -74,12 +74,17 @@ class FilterSheet extends HTMLElement {
   _renderBrandGrid() {
     const grid = this.querySelector('#brand-grid');
     if (!grid) return;
-    const brands = store.get('availableBrands');
+    const brands = [...store.get('availableBrands')].sort((a, b) => {
+      if (a === 'Inconnu') return 1;
+      if (b === 'Inconnu') return -1;
+      return 0;
+    });
     const selected = store.get('prefs').selectedBrands;
     grid.innerHTML = brands.map(brand => {
       const style = getBrandStyle(brand);
       const isSelected = selected.includes(brand);
-      return `<button class="brand-filter-pill ${isSelected ? 'selected' : ''}"
+      const isUnknown = brand === 'Inconnu';
+      return `<button class="brand-filter-pill ${isSelected ? 'selected' : ''} ${isUnknown ? 'brand-unknown' : ''}"
                 style="background:${style.bg};color:${style.text}"
                 data-brand="${this._esc(brand)}">${this._esc(brand)}</button>`;
     }).join('');

@@ -8,26 +8,26 @@ test('Shell returns yellow bg with black text', () => {
   assert.equal(s.text, '#000000');
 });
 
-test('Petro-Canada returns red bg with white text', () => {
+test('Petro-Canada returns correct red', () => {
   const s = getBrandStyle('Petro-Canada');
-  assert.equal(s.bg, '#E31837');
+  assert.equal(s.bg, '#E1251B');
   assert.equal(s.text, '#FFFFFF');
 });
 
-test('unknown brand returns consistent color (same input → same output)', () => {
-  const a = getBrandStyle('BrandXYZ');
-  const b = getBrandStyle('BrandXYZ');
-  assert.deepEqual(a, b);
+test('Esso returns correct blue', () => {
+  const s = getBrandStyle('Esso');
+  assert.equal(s.bg, '#0033A0');
+  assert.equal(s.text, '#FFFFFF');
 });
 
-test('unknown brand returns bg and text fields', () => {
+test('unknown brand returns light grey default', () => {
   const s = getBrandStyle('SomeBrand');
-  assert.ok(s.bg, 'bg should exist');
-  assert.ok(s.text, 'text should exist');
+  assert.equal(s.bg, '#E5E5EA');
+  assert.equal(s.text, '#1C1C1E');
 });
 
-test('different unknown brands return different bg colors', () => {
+test('all unknown brands return the same default color', () => {
   const a = getBrandStyle('AlphaPetrol');
   const b = getBrandStyle('BetaGazoline');
-  assert.notEqual(a.bg, b.bg);
+  assert.deepEqual(a, b);
 });
