@@ -97,6 +97,7 @@ async function initLocation() {
 function startLocationRefresh() {
   if (_locationRefreshInterval) return; // already running
   _locationRefreshInterval = setInterval(async () => {
+    if (document.visibilityState !== 'visible') return;
     if (store.get('locationStatus') !== 'granted') return;
     try {
       const loc = await getLocation();
