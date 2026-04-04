@@ -1,4 +1,4 @@
-const APP_SHELL_CACHE = 'app-shell-v1';
+const APP_SHELL_CACHE = 'app-shell-v2';
 const DATA_CACHE = 'data-v1';
 const DATA_URL = 'https://regieessencequebec.ca/stations.geojson.gz';
 
@@ -14,6 +14,8 @@ const APP_SHELL_FILES = [
   '/js/filter.js',
   '/js/brands.js',
   '/js/components/app-header.js',
+  '/js/components/location-bar.js',
+  '/js/components/location-picker.js',
   '/js/components/filter-sheet.js',
   '/js/components/station-list.js',
   '/js/components/station-card.js',
@@ -24,9 +26,19 @@ const APP_SHELL_FILES = [
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(APP_SHELL_CACHE)
-      .then(cache => cache.addAll(APP_SHELL_FILES))
-      .then(() => self.skipWaiting())
+    caches.open(APP_SHELL_CACHE).then(cache =>
+      // cache: 'reload' fetches from network, bypassing HTTP cache.
+      // This ensures a fresh copy even when the server sends long
+      // Cache-Control headers. It also updates the HTTP cache as a
+      // side-effect, so subsequent navigations stay fast.
+      Promise.all(
+        APP_SHELL_FILES.map(url =>
+          fetch(url, { cache: 'reload' })
+            .then(res => { if (res.ok) cache.put(url, res); })
+            .catch(() => {}) // non-critical assets (icons) can fail silently
+        )
+      )
+    ).then(() => self.skipWaiting())
   );
 });
 
