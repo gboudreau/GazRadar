@@ -3,7 +3,7 @@ const BRAND_COLORS = {
   'Esso':         { bg: '#0033A0', text: '#FFFFFF' },
   'Petro-Canada': { bg: '#E1251B', text: '#FFFFFF' },
   'Ultramar':     { bg: '#005DAA', text: '#FFFFFF' },
-  'Harnois':      { bg: '#E30613', text: '#FFFFFF' },
+  'Harnois':      { bg: '#55B545', text: '#FFFFFF' },
   'Irving':       { bg: '#006341', text: '#FFFFFF' },
   'Sonic':        { bg: '#F58220', text: '#FFFFFF' },
 };
