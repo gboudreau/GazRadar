@@ -42,7 +42,7 @@ class AppHeader extends HTMLElement {
             </button>
           </div>
         </div>
-        <div class="meta-row">Source: ${this._fmt(generatedAt)} · Mis à jour: ${this._fmt(lastFetchedAt)}</div>
+        <div class="meta-row">Mis à jour: ${this._fmt(lastFetchedAt)} · Source: ${this._fmt(generatedAt)}</div>
       </div>
     `;
 
