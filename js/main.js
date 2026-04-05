@@ -70,13 +70,16 @@ function runFilter() {
 
 store.subscribe('stations', runFilter);
 store.subscribe('prefs', runFilter);
-store.subscribe('userLocation', runFilter);
+store.subscribe('userLocation', loc => {
+  if (loc) store.set('userLocationUpdatedAt', Date.now());
+  runFilter();
+});
 store.subscribe('customLocation', runFilter);
 
 document.addEventListener('gazradar:refresh', () => {
   loadAndSetStations(true);
   if (!store.get('customLocation') && store.get('locationStatus') === 'granted') {
-    getLocation().then(loc => store.set('userLocation', loc)).catch(() => {});
+    getLocation({ maximumAge: 0 }).then(loc => store.set('userLocation', loc)).catch(() => {});
   }
 });
 document.addEventListener('gazradar:retry-location', initLocation);
@@ -121,7 +124,7 @@ function startLocationRefresh() {
     if (document.visibilityState !== 'visible') return;
     if (store.get('locationStatus') !== 'granted') return;
     try {
-      const loc = await getLocation();
+      const loc = await getLocation({ maximumAge: 0 });
       store.set('userLocation', loc);
     } catch {
       // silently keep the last known location

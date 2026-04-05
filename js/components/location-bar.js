@@ -11,8 +11,9 @@ function _esc(s) {
 class LocationBar extends HTMLElement {
   connectedCallback() {
     this._unsubs = [
-      store.subscribe('customLocation', () => this._render()),
-      store.subscribe('locationStatus',  () => this._render()),
+      store.subscribe('customLocation',        () => this._render()),
+      store.subscribe('locationStatus',         () => this._render()),
+      store.subscribe('userLocationUpdatedAt',  () => this._render()),
     ];
     this._render();
     this.addEventListener('click', this._onClick.bind(this));
@@ -34,7 +35,11 @@ class LocationBar extends HTMLElement {
       label     = 'Localisation…';
       clearable = false;
     } else if (status === 'granted') {
-      label     = 'Ma position actuelle';
+      const updatedAt = store.get('userLocationUpdatedAt');
+      const timeStr   = updatedAt
+        ? new Date(updatedAt).toLocaleTimeString('fr-CA', { hour: '2-digit', minute: '2-digit' })
+        : null;
+      label     = timeStr ? `Ma position · ${timeStr}` : 'Ma position actuelle';
       clearable = false;
     } else {
       label     = 'Position inconnue';

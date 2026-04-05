@@ -11,6 +11,7 @@ const _state = {
   availableGasTypes: [],
   brandExcludedCount: 0,
   userLocation: null,
+  userLocationUpdatedAt: null,
   locationStatus: 'pending',
   dataStatus: 'idle',
   generatedAt: null,

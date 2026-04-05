@@ -39,7 +39,7 @@ function _shortLabel(item) {
   return parts.length ? parts.join(', ') : item.display_name;
 }
 
-export function getLocation() {
+export function getLocation({ maximumAge = 300000 } = {}) {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
       reject(new Error('Geolocation not supported'));
@@ -48,7 +48,7 @@ export function getLocation() {
     navigator.geolocation.getCurrentPosition(
       pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
       err => reject(err),
-      { enableHighAccuracy: false, timeout: 50000, maximumAge: 300000 }
+      { enableHighAccuracy: false, timeout: 50000, maximumAge }
     );
   });
 }
