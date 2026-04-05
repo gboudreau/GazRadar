@@ -16,6 +16,7 @@ const APP_SHELL_FILES = [
   '/js/components/app-header.js',
   '/js/components/location-bar.js',
   '/js/components/location-picker.js',
+  '/js/components/quick-filters.js',
   '/js/components/filter-sheet.js',
   '/js/components/station-list.js',
   '/js/components/station-card.js',

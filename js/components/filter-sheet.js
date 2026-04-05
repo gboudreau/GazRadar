@@ -8,14 +8,7 @@ class FilterSheet extends HTMLElement {
     this._unsubs = [
       store.subscribe('filterSheetOpen', open => this._setOpen(open)),
       store.subscribe('availableBrands',  () => this._renderBrandGrid()),
-      store.subscribe('availableGasTypes', () => this._renderGasTypes()),
-      // Re-sync all controls when prefs are changed externally
-      // (e.g. localStorage hydration on boot, "Clear Brand Filters" from empty-state)
-      store.subscribe('prefs', () => {
-        this._renderBrandGrid();
-        this._renderGasTypes();
-        this._syncStaticControls();
-      }),
+      store.subscribe('prefs',            () => this._renderBrandGrid()),
     ];
     this._buildShell();
     this._setOpen(store.get('filterSheetOpen'));
@@ -26,49 +19,21 @@ class FilterSheet extends HTMLElement {
   }
 
   _buildShell() {
-    const prefs = store.get('prefs');
     this.innerHTML = `
       <div class="sheet-backdrop" id="sheet-backdrop"></div>
       <div class="filter-sheet" id="filter-sheet" role="dialog" aria-modal="true">
         <div class="sheet-handle"></div>
-
-        <div class="sheet-section">
-          <div class="sheet-section-title">Type de carburant</div>
-          <div class="gas-type-row" id="gas-type-row"></div>
-        </div>
-
-        <div class="sheet-section">
-          <div class="sheet-section-title">Trier par</div>
-          <div class="segmented-control">
-            <button class="seg-option ${prefs.sortBy === 'price' ? 'active' : ''}"
-              data-sort="price">💰 Prix</button>
-            <button class="seg-option ${prefs.sortBy === 'distance' ? 'active' : ''}"
-              data-sort="distance">📍 Distance</button>
-          </div>
-        </div>
-
-        <div class="sheet-section">
-          <div class="sheet-section-title">Distance Maximale</div>
-          <div class="distance-row">
-            <input type="range" class="distance-slider" id="distance-slider"
-              min="1" max="50" step="1" value="${prefs.maxDistanceKm}" />
-            <span class="distance-val" id="distance-val">${prefs.maxDistanceKm} km</span>
-          </div>
-        </div>
-
         <div class="sheet-section">
           <div class="sheet-section-header">
-            <div class="sheet-section-title">Marques</div>
+            <div class="sheet-section-title">Bannières</div>
             <button class="sheet-clear-btn" id="brand-clear" hidden>Effacer</button>
           </div>
           <div class="brand-grid" id="brand-grid"></div>
         </div>
-      </div>
-    `;
+      </div>`;
 
-    this._attachStaticListeners();
+    this.querySelector('#sheet-backdrop')?.addEventListener('click', () => this._close());
     this._renderBrandGrid();
-    this._renderGasTypes();
   }
 
   _esc(str) {
@@ -94,9 +59,9 @@ class FilterSheet extends HTMLElement {
     }
 
     grid.innerHTML = brands.map(brand => {
-      const style = getBrandStyle(brand);
+      const style     = getBrandStyle(brand);
       const isSelected = selected.includes(brand);
-      const isUnknown = brand === 'Inconnu';
+      const isUnknown  = brand === 'Inconnu';
       return `<button class="brand-filter-pill ${isSelected ? 'selected' : ''} ${isUnknown ? 'brand-unknown' : ''}"
                 style="background:${style.bg};color:${style.text}"
                 data-brand="${this._esc(brand)}">${this._esc(brand)}</button>`;
@@ -104,9 +69,9 @@ class FilterSheet extends HTMLElement {
 
     grid.querySelectorAll('.brand-filter-pill').forEach(btn => {
       btn.addEventListener('click', () => {
-        const brand = btn.dataset.brand;
+        const brand   = btn.dataset.brand;
         const current = store.get('prefs').selectedBrands;
-        const next = current.includes(brand)
+        const next    = current.includes(brand)
           ? current.filter(b => b !== brand)
           : [...current, brand];
         this._savePrefs({ selectedBrands: next });
@@ -115,75 +80,8 @@ class FilterSheet extends HTMLElement {
     });
   }
 
-  _renderGasTypes() {
-    const row = this.querySelector('#gas-type-row');
-    if (!row) return;
-    const GAS_TYPE_ORDER = ['Régulier', 'Super', 'Diesel'];
-    const types = [...store.get('availableGasTypes')].sort((a, b) => {
-      const ia = GAS_TYPE_ORDER.indexOf(a);
-      const ib = GAS_TYPE_ORDER.indexOf(b);
-      if (ia === -1 && ib === -1) return a.localeCompare(b, 'fr');
-      if (ia === -1) return 1;
-      if (ib === -1) return -1;
-      return ia - ib;
-    });
-    const selected = store.get('prefs').selectedGasTypes;
-    row.innerHTML = types.map(type => {
-      const isSelected = selected.includes(type);
-      return `<button class="gas-pill ${isSelected ? 'selected' : ''}"
-                data-type="${this._esc(type)}">${this._esc(type)}</button>`;
-    }).join('');
-
-    row.querySelectorAll('.gas-pill').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const type = btn.dataset.type;
-        const current = store.get('prefs').selectedGasTypes;
-        if (current.includes(type) && current.length === 1) return;
-        const next = current.includes(type)
-          ? current.filter(t => t !== type)
-          : [...current, type];
-        this._savePrefs({ selectedGasTypes: next });
-        btn.classList.toggle('selected', next.includes(type));
-      });
-    });
-  }
-
-  _attachStaticListeners() {
-    const slider = this.querySelector('#distance-slider');
-    const label  = this.querySelector('#distance-val');
-    slider?.addEventListener('input', e => {
-      const val = Number(e.target.value);
-      if (label) label.textContent = `${val} km`;
-      this._savePrefs({ maxDistanceKm: val });
-    });
-
-    this.querySelectorAll('.seg-option').forEach(btn => {
-      btn.addEventListener('click', () => {
-        this.querySelectorAll('.seg-option').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        this._savePrefs({ sortBy: btn.dataset.sort });
-      });
-    });
-
-    this.querySelector('#sheet-backdrop')?.addEventListener('click', () => {
-      this._close();
-    });
-  }
-
-  _syncStaticControls() {
-    const prefs = store.get('prefs');
-    const slider = this.querySelector('#distance-slider');
-    const label  = this.querySelector('#distance-val');
-    if (slider) slider.value = prefs.maxDistanceKm;
-    if (label)  label.textContent = `${prefs.maxDistanceKm} km`;
-    this.querySelectorAll('.seg-option').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.sort === prefs.sortBy);
-    });
-  }
-
   _savePrefs(partial) {
-    const current = store.get('prefs');
-    const next = { ...current, ...partial };
+    const next = { ...store.get('prefs'), ...partial };
     store.set('prefs', next);
     localStorage.setItem(PREFS_KEY, JSON.stringify(next));
   }

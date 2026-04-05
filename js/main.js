@@ -5,6 +5,7 @@ import { filterAndSort } from './filter.js';
 import './components/app-header.js';
 import './components/location-bar.js';
 import './components/location-picker.js';
+import './components/quick-filters.js';
 import './components/filter-sheet.js';
 import './components/station-list.js';
 import './components/station-card.js';
@@ -31,7 +32,7 @@ document.addEventListener('visibilitychange', () => {
 
 const fab = document.createElement('button');
 fab.className = 'filter-fab';
-fab.innerHTML = '⚙ Filtres';
+fab.innerHTML = '🏷 Bannières';
 fab.addEventListener('click', () => store.set('filterSheetOpen', true));
 document.body.appendChild(fab);
 
