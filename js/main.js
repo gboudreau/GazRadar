@@ -73,7 +73,12 @@ store.subscribe('prefs', runFilter);
 store.subscribe('userLocation', runFilter);
 store.subscribe('customLocation', runFilter);
 
-document.addEventListener('gazradar:refresh', () => loadAndSetStations(true));
+document.addEventListener('gazradar:refresh', () => {
+  loadAndSetStations(true);
+  if (!store.get('customLocation') && store.get('locationStatus') === 'granted') {
+    getLocation().then(loc => store.set('userLocation', loc)).catch(() => {});
+  }
+});
 document.addEventListener('gazradar:retry-location', initLocation);
 
 async function loadAndSetStations(force = false) {
