@@ -66,7 +66,7 @@ class StationList extends HTMLElement {
       return;
     }
 
-    if (locationStatus === 'pending') {
+    if (locationStatus === 'pending' && !store.get('customLocation')) {
       this.innerHTML = `
         <div class="location-pending">
           <div class="location-pending-spinner"></div>
