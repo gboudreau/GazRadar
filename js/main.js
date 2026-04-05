@@ -14,6 +14,21 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(console.warn);
 }
 
+// Screen Wake Lock — keep screen on while the app is visible
+let _wakeLock = null;
+async function acquireWakeLock() {
+  if (!('wakeLock' in navigator)) return;
+  try {
+    _wakeLock = await navigator.wakeLock.request('screen');
+  } catch {
+    // Permission denied or not supported — fail silently
+  }
+}
+acquireWakeLock();
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') acquireWakeLock();
+});
+
 const fab = document.createElement('button');
 fab.className = 'filter-fab';
 fab.innerHTML = '⚙ Filtres';
