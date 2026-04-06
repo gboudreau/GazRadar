@@ -74,7 +74,9 @@ store.subscribe('customLocation', loc => {
 });
 
 const firstLaunchDone = localStorage.getItem('gazradar_first_launch_done');
-if (firstLaunchDone) store.set('isFirstLaunch', false);
+if (firstLaunchDone === 'true' || firstLaunchDone === '1') {
+  store.set('isFirstLaunch', false);
+}
 
 function runFilter() {
   const stations        = store.get('stations');
