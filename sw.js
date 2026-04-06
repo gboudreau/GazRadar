@@ -28,10 +28,6 @@ const APP_SHELL_FILES = [
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(APP_SHELL_CACHE).then(cache =>
-      // cache: 'reload' fetches from network, bypassing HTTP cache.
-      // This ensures a fresh copy even when the server sends long
-      // Cache-Control headers. It also updates the HTTP cache as a
-      // side-effect, so subsequent navigations stay fast.
       Promise.all(
         APP_SHELL_FILES.map(url =>
           fetch(url, { cache: 'reload' })
@@ -57,27 +53,38 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   const { request } = event;
+  const url = new URL(request.url);
 
-  if (request.url === DATA_URL) {
+  // For app shell assets, use cache-first with network update in background
+  if (url.origin === self.location.origin && !url.href.endsWith(DATA_URL)) {
     event.respondWith(
-      fetch(request)
-        .then(response => {
-          if (response.ok) {
-            const clone = response.clone();
-            caches.open(DATA_CACHE).then(cache => cache.put(request, clone));
-          }
-          return response;
-        })
-        .catch(() => caches.match(request))
+      caches.match(request).then(response => {
+        // Always fetch and update cache in background
+        const fetchAndCache = fetch(request).then(networkResponse => {
+          caches.open(APP_SHELL_CACHE).then(cache => cache.put(request, networkResponse.clone()));
+          return networkResponse;
+        });
+        return response || fetchAndCache;
+      })
     );
     return;
   }
 
-  const url = new URL(request.url);
-  if (url.origin === self.location.origin) {
+  // For data URL, use stale-while-revalidate
+  if (url.href === DATA_URL) {
     event.respondWith(
-      caches.match(request)
-        .then(cached => cached ?? fetch(request))
+      caches.open(DATA_CACHE).then(cache => {
+        return fetch(event.request).then(response => {
+          if (response.ok) {
+            cache.put(event.request, response.clone());
+          }
+          return response;
+        }).catch(() => {
+          // Return stale cache if network fails
+          return cache.match(event.request);
+        });
+      })
     );
+    return;
   }
 });
