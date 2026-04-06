@@ -36,16 +36,31 @@ fab.innerHTML = '🏷 Bannières';
 fab.addEventListener('click', () => store.set('filterSheetOpen', true));
 document.body.appendChild(fab);
 
-const savedPrefs = JSON.parse(localStorage.getItem('gazradar_prefs') ?? 'null');
+let savedPrefs = null;
+try {
+  savedPrefs = JSON.parse(localStorage.getItem('gazradar_prefs') ?? 'null');
+} catch (e) {
+  console.warn('Failed to parse saved preferences, using defaults', e);
+}
 if (savedPrefs) store.set('prefs', { ...store.get('prefs'), ...savedPrefs });
 
-const savedMeta = JSON.parse(localStorage.getItem('gazradar_fetch_meta') ?? 'null');
+let savedMeta = null;
+try {
+  savedMeta = JSON.parse(localStorage.getItem('gazradar_fetch_meta') ?? 'null');
+} catch (e) {
+  console.warn('Failed to parse fetch meta, using defaults', e);
+}
 if (savedMeta) {
   store.set('generatedAt', savedMeta.generatedAt);
   store.set('lastFetchedAt', savedMeta.lastFetchedAt);
 }
 
-const savedCustomLocation = JSON.parse(localStorage.getItem('gazradar_custom_location') ?? 'null');
+let savedCustomLocation = null;
+try {
+  savedCustomLocation = JSON.parse(localStorage.getItem('gazradar_custom_location') ?? 'null');
+} catch (e) {
+  console.warn('Failed to parse custom location, using defaults', e);
+}
 if (savedCustomLocation) store.set('customLocation', savedCustomLocation);
 
 store.subscribe('customLocation', loc => {
