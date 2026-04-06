@@ -17,22 +17,50 @@ if ('serviceWorker' in navigator) {
 
 // Screen Wake Lock — keep screen on while the app is visible
 let _wakeLock = null;
+let _wakeLockRequestPending = false;
+
 async function acquireWakeLock() {
   if (!('wakeLock' in navigator)) {
     console.log('Wake Lock API not supported on this device');
     return;
   }
+  if (_wakeLock) {
+    // Already have a wake lock
+    return;
+  }
+  if (_wakeLockRequestPending) {
+    // Already requesting
+    return;
+  }
+  _wakeLockRequestPending = true;
   try {
     _wakeLock = await navigator.wakeLock.request('screen');
     console.log('Wake Lock acquired');
   } catch (err) {
-    // Permission denied or other error
     console.warn('Failed to acquire wake lock:', err);
+  } finally {
+    _wakeLockRequestPending = false;
   }
 }
+
+function releaseWakeLock() {
+  if (_wakeLock) {
+    _wakeLock.release();
+    _wakeLock = null;
+    console.log('Wake Lock released');
+  }
+}
+
 acquireWakeLock();
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') acquireWakeLock();
+  if (document.visibilityState === 'visible') {
+    acquireWakeLock();
+  } else {
+    releaseWakeLock();
+  }
+});
+window.addEventListener('unload', () => {
+  releaseWakeLock();
 });
 
 const fab = document.createElement('button');
@@ -130,7 +158,6 @@ async function loadAndSetStations(force = false) {
 }
 
 let _locationRefreshInterval = null;
-let _locationRefreshLock = false;
 
 async function initLocation() {
   store.set('locationStatus', 'pending');
@@ -147,7 +174,6 @@ async function initLocation() {
 function startLocationRefresh() {
   if (_locationRefreshInterval) return;
   
-  _locationRefreshLock = true;
   _locationRefreshInterval = setInterval(async () => {
     if (document.visibilityState !== 'visible') return;
     if (store.get('locationStatus') !== 'granted') return;
@@ -158,7 +184,6 @@ function startLocationRefresh() {
       // keep last known location
     }
   }, 60_000);
-  _locationRefreshLock = false;
 }
 
 (async () => {
