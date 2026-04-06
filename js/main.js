@@ -18,11 +18,16 @@ if ('serviceWorker' in navigator) {
 // Screen Wake Lock — keep screen on while the app is visible
 let _wakeLock = null;
 async function acquireWakeLock() {
-  if (!('wakeLock' in navigator)) return;
+  if (!('wakeLock' in navigator)) {
+    console.log('Wake Lock API not supported on this device');
+    return;
+  }
   try {
     _wakeLock = await navigator.wakeLock.request('screen');
-  } catch {
-    // Permission denied or not supported — fail silently
+    console.log('Wake Lock acquired');
+  } catch (err) {
+    // Permission denied or other error
+    console.warn('Failed to acquire wake lock:', err);
   }
 }
 acquireWakeLock();
@@ -120,6 +125,7 @@ async function loadAndSetStations(force = false) {
 }
 
 let _locationRefreshInterval = null;
+let _locationRefreshLock = false;
 
 async function initLocation() {
   store.set('locationStatus', 'pending');
@@ -134,7 +140,9 @@ async function initLocation() {
 }
 
 function startLocationRefresh() {
-  if (_locationRefreshInterval) return; // already running
+  if (_locationRefreshInterval) return;
+  
+  _locationRefreshLock = true;
   _locationRefreshInterval = setInterval(async () => {
     if (document.visibilityState !== 'visible') return;
     if (store.get('locationStatus') !== 'granted') return;
@@ -142,9 +150,10 @@ function startLocationRefresh() {
       const loc = await getLocation({ maximumAge: 0 });
       store.set('userLocation', loc);
     } catch {
-      // silently keep the last known location
+      // keep last known location
     }
   }, 60_000);
+  _locationRefreshLock = false;
 }
 
 (async () => {
