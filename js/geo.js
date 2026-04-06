@@ -12,22 +12,27 @@ export function haversine(a, b) {
 }
 
 export async function geocode(query) {
-  const url = new URL('https://nominatim.openstreetmap.org/search');
-  url.searchParams.set('q', query);
-  url.searchParams.set('format', 'json');
-  url.searchParams.set('limit', '6');
-  url.searchParams.set('countrycodes', 'ca');
-  url.searchParams.set('addressdetails', '1');
-  const res = await fetch(url, {
-    headers: { 'Accept-Language': 'fr', 'User-Agent': 'GazRadar/1.0' },
-  });
-  if (!res.ok) throw new Error('Geocoding failed');
-  const data = await res.json();
-  return data.map(item => ({
-    lat: parseFloat(item.lat),
-    lng: parseFloat(item.lon),
-    label: _shortLabel(item),
-  }));
+  try {
+    const url = new URL('https://nominatim.openstreetmap.org/search');
+    url.searchParams.set('q', query);
+    url.searchParams.set('format', 'json');
+    url.searchParams.set('limit', '6');
+    url.searchParams.set('countrycodes', 'ca');
+    url.searchParams.set('addressdetails', '1');
+    const res = await fetch(url, {
+      headers: { 'Accept-Language': 'fr', 'User-Agent': 'GazRadar/1.0' },
+    });
+    if (!res.ok) throw new Error('Geocoding failed');
+    const data = await res.json();
+    return data.map(item => ({
+      lat: parseFloat(item.lat),
+      lng: parseFloat(item.lon),
+      label: _shortLabel(item),
+    }));
+  } catch (err) {
+    console.warn('Geocoding failed:', err);
+    return [];
+  }
 }
 
 function _shortLabel(item) {
