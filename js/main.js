@@ -79,6 +79,9 @@ if (firstLaunchDone === 'true' || firstLaunchDone === '1') {
 }
 
 function runFilter() {
+  // Prevent premature execution before initial load completes
+  if (!store.get('initialized')) return;
+
   const stations        = store.get('stations');
   const prefs           = store.get('prefs');
   const customLocation  = store.get('customLocation');
@@ -162,4 +165,5 @@ function startLocationRefresh() {
   if (store.get('isFirstLaunch')) store.set('filterSheetOpen', true);
 
   await Promise.all([initLocation(), loadAndSetStations()]);
+  store.set('initialized', true);
 })();

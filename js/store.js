@@ -20,6 +20,7 @@ const _state = {
   locationPickerOpen: false,
   customLocation: null,
   isFirstLaunch: true,
+  initialized: false,  // guard to prevent premature execution
 };
 
 const _subscribers = {};
